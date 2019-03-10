@@ -4,7 +4,7 @@ Hackintosh configuration and kexts.
 
 ## Relevant Hardware
 
-* **CPU**: Intel Core i9-9900k
+* **CPU**: Intel Core i9-9900k (Coffee Lake)
     * iGPU: Intel UHD 630
 * **Motherboard**: Gigabyte Z390 I Aorus Pro WiFi
     * Audio: Realtek ALC1220
