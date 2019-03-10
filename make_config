@@ -3,98 +3,98 @@
 require 'yaml'
 
 DEFAULT_ARGS = {
-	out: 'config.plist',
-	serials: 'serials.yaml'
+    out: 'config.plist',
+    serials: 'serials.yaml'
 }.freeze
 
 def symbolize_keys(hash)
-	Hash[hash.map { |k, v| [k.to_sym, v] }]
+    Hash[hash.map { |k, v| [k.to_sym, v] }]
 end
 
 def slice(hash, *keys)
-	Hash[[keys, hash.values_at(*keys)].transpose]
+    Hash[[keys, hash.values_at(*keys)].transpose]
 end
 
 # parse an array of strings of the format "--key=value" or "-flag" and reutrn
 # a hash of `:key => value` or `:flag => nil` pairs.
 def parse_args(hash)
-	symbolize_keys(Hash[hash.flat_map{|s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) }])
+    symbolize_keys(Hash[hash.flat_map{|s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) }])
 end
 
 # [string] -> [string, bool]
 def ensure_files_exist(*filenames)
-	filenames.each do |filename|
-		return [filename, false] unless File.file?(filename)
-	end
+    filenames.each do |filename|
+        return [filename, false] unless File.file?(filename)
+    end
 
-	['', true]
+    ['', true]
 end
 
 # string -> hash
 def read_serials(filename)
-	YAML.load(File.read(filename))
+    YAML.load(File.read(filename))
 end
 
 # string, hash -> string
 def replace_placeholders(filename, serials)
-	in_contents = File.read(filename)
+    in_contents = File.read(filename)
 
-	serials.each do |k, v|
-		in_contents = in_contents.gsub(":#{k}:", v)
-	end
+    serials.each do |k, v|
+        in_contents = in_contents.gsub(":#{k}:", v)
+    end
 
-	in_contents
+    in_contents
 end
 
 # string, string -> int
 def write_outfile(filename, contents)
-	File.open(filename, 'w') do |file|
-		file.puts(contents)
-	end
+    File.open(filename, 'w') do |file|
+        file.puts(contents)
+    end
 
-	File.stat(filename).size
+    File.stat(filename).size
 end
 
 def verify_plist(filename)
-	system("plutil #{filename}")
+    system("plutil #{filename}")
 end
 
 def main
-	if ARGV.count < 1
-		puts "usage: make_config --in=config-template [--out=config.plist --serials=serials.yaml]"
-		exit 1
-	end
+    if ARGV.count < 1
+        puts "usage: make_config --in=config-template [--out=config.plist --serials=serials.yaml]"
+        exit 1
+    end
 
-	args = DEFAULT_ARGS.merge(parse_args(ARGV))
+    args = DEFAULT_ARGS.merge(parse_args(ARGV))
 
-	missing_file, ok = ensure_files_exist(*slice(args, :in, :serials).values)
+    missing_file, ok = ensure_files_exist(*slice(args, :in, :serials).values)
 
-	unless ok
-		STDERR.puts "File \"#{missing_file}\" does not exist."
-		exit 2
-	end
+    unless ok
+        STDERR.puts "File \"#{missing_file}\" does not exist."
+        exit 2
+    end
 
-	in_filename = args[:in]
-	out_filename = args[:out]
-	serials_filename = args[:serials]
+    in_filename = args[:in]
+    out_filename = args[:out]
+    serials_filename = args[:serials]
 
-	puts "Merging: #{in_filename} + #{serials_filename} -> #{out_filename}..."
+    puts "Merging: #{in_filename} + #{serials_filename} -> #{out_filename}..."
 
-	serials = read_serials(serials_filename)
-	out_contents = replace_placeholders(in_filename, serials)
-	len = write_outfile(out_filename, out_contents)
+    serials = read_serials(serials_filename)
+    out_contents = replace_placeholders(in_filename, serials)
+    len = write_outfile(out_filename, out_contents)
 
-	puts "Wrote #{len} bytes to #{out_filename}."
+    puts "Wrote #{len} bytes to #{out_filename}."
 
-	puts "Verifying #{out_filename}"
-	ok = verify_plist(out_filename)
+    puts "Verifying #{out_filename}"
+    ok = verify_plist(out_filename)
 
-	unless ok
-		STDERR.puts "plutil reports #{out_filename} is not a valid plist!"
-		exit 3
-	end
+    unless ok
+        STDERR.puts "plutil reports #{out_filename} is not a valid plist!"
+        exit 3
+    end
 
-	puts 'Done!'
+    puts 'Done!'
 end
 
 main
