@@ -65,20 +65,6 @@
 					U0FUQQ==
 					</data>
 				</dict>
-				<dict>
-					<key>Comment</key>
-					<string>Rename GFX0 to IGPU</string>
-					<key>Disabled</key>
-					<false/>
-					<key>Find</key>
-					<data>
-					R0ZYMA==
-					</data>
-					<key>Replace</key>
-					<data>
-					SUdQVQ==
-					</data>
-				</dict>
 			</array>
 		</dict>
 		<key>DropTables</key>
@@ -94,8 +80,6 @@
 		</array>
 		<key>FixHeaders</key>
 		<true/>
-		<key>HaltEnabler</key>
-		<false/>
 		<key>SSDT</key>
 		<dict>
 			<key>Generate</key>
@@ -108,11 +92,11 @@
 	<key>Boot</key>
 	<dict>
 		<key>Arguments</key>
-		<string>keepsyms=1 dart=0 slide=0 darkwake=3 shikigva=40</string>
+		<string>alcid=16 dart=0</string>
 		<key>DefaultVolume</key>
 		<string>LastBootedVolume</string>
 		<key>Timeout</key>
-		<integer>5</integer>
+		<integer>-1</integer>
 		<key>XMPDetection</key>
 		<string>Yes</string>
 	</dict>
@@ -120,19 +104,17 @@
 	<dict>
 		<key>Audio</key>
 		<dict>
-			<key>Inject</key>
-			<integer>1</integer>
 			<key>ResetHDA</key>
 			<true/>
 		</dict>
 		<key>Properties</key>
 		<dict>
-			<key>PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)/Pci(0x0,0x0)</key>
+			<key>PciRoot(0)/Pci(0x1,0)/Pci(0,0)/Pci(0,0)/Pci(0,0)</key>
 			<dict>
 				<key>PP_DisableClockStretcher</key>
 				<integer>1</integer>
 				<key>PP_DisablePowerContainment</key>
-				<integer>1</integer>
+				<integer>0</integer>
 				<key>PP_DisableULV</key>
 				<integer>1</integer>
 				<key>PP_EnableUploadFirmware</key>
@@ -161,7 +143,7 @@
 				AAADeP8AAEAZAQCIJgEAUMMAAARAGQEAgDgBAIA4AQBQ
 				wwAABYA4AQDcSgEA3EoBAFDDAAAGAHcBAAB3AQCQXwEA
 				UMMAAAeQkQEAkJEBAAB3AQBQwwAAARgAAAAAAAAAC3AX
-				6AO4CyMACgBUA5ABkAGQAZABkAGQAZABAAAAAAACBDEH
+				6APwCi0ACgBUA5ABkAGQAZABkAGQAZABAAAAAAACBDEH
 				3ADcANwALAEAAFkAaQBKAEoAXwBzAHMAZABAAJCSl2CW
 				AJBVAAAAAAAAAAAAAAAAAAAAAAACAtQwAAACEGDqAAAC
 				EA==
@@ -170,32 +152,6 @@
 				<integer>0</integer>
 				<key>PP_ToolsLogSpaceSize</key>
 				<integer>524288</integer>
-			</dict>
-			<key>PciRoot(0x0)/Pci(0x1f,0x3)</key>
-			<dict>
-				<key>layout-id</key>
-				<data>
-				AQAAAA==
-				</data>
-			</dict>
-			<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
-			<dict>
-				<key>AAPL,ig-platform-id</key>
-				<data>
-				AwCSPg==
-				</data>
-				<key>device-id</key>
-				<data>
-				kj4AAA==
-				</data>
-				<key>framebuffer-patch-enable</key>
-				<data>
-				AQAAAA==
-				</data>
-				<key>framebuffer-stolenmem</key>
-				<data>
-				AAAwAQ==
-				</data>
 			</dict>
 		</dict>
 		<key>USB</key>
@@ -206,11 +162,6 @@
 	</dict>
 	<key>GUI</key>
 	<dict>
-		<key>Hide</key>
-		<array>
-			<string>Preboot</string>
-			<string>Recovery</string>
-		</array>
 		<key>Scan</key>
 		<dict>
 			<key>Entries</key>
@@ -226,18 +177,11 @@
 	<key>Graphics</key>
 	<dict>
 		<key>Inject</key>
-		<dict>
-			<key>ATI</key>
-			<false/>
-			<key>Intel</key>
-			<false/>
-			<key>NVidia</key>
-			<false/>
-		</dict>
+		<false/>
 	</dict>
 	<key>KernelAndKextPatches</key>
 	<dict>
-		<key>AppleRTC</key>
+		<key>AppleIntelCPUPM</key>
 		<false/>
 		<key>KernelPm</key>
 		<true/>
@@ -245,40 +189,62 @@
 		<array>
 			<dict>
 				<key>Comment</key>
-				<string>External icons patch</string>
+				<string>USB Port Limit Patch 1</string>
 				<key>Disabled</key>
 				<false/>
 				<key>Find</key>
 				<data>
-				RXh0ZXJuYWw=
-				</data>
-				<key>InfoPlistPatch</key>
-				<false/>
-				<key>Name</key>
-				<string>AppleAHCIPort</string>
-				<key>Replace</key>
-				<data>
-				SW50ZXJuYWw=
-				</data>
-			</dict>
-			<dict>
-				<key>Comment</key>
-				<string>Port limit increase (Ricky)</string>
-				<key>Disabled</key>
-				<false/>
-				<key>Find</key>
-				<data>
-				g/sPD4OPBAAA
+				g/sPD4cLBAAA
 				</data>
 				<key>InfoPlistPatch</key>
 				<false/>
 				<key>MatchOS</key>
-				<string>10.14.x</string>
+				<string>10.14.4</string>
+				<key>Name</key>
+				<string>com.apple.iokit.IOUSBHostFamily</string>
+				<key>Replace</key>
+				<data>
+				g/s/D4cLBAAA
+				</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>USB Port Limit Patch 2</string>
+				<key>Disabled</key>
+				<false/>
+				<key>Find</key>
+				<data>
+				QYP/Dw+DlAQAAA==
+				</data>
+				<key>InfoPlistPatch</key>
+				<false/>
+				<key>MatchOS</key>
+				<string>10.14.4</string>
 				<key>Name</key>
 				<string>com.apple.driver.usb.AppleUSBXHCI</string>
 				<key>Replace</key>
 				<data>
-				g/sPkJCQkJCQ
+				QYP/Pw+DlAQAAA==
+				</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>USB Port Limit Patch 3</string>
+				<key>Disabled</key>
+				<false/>
+				<key>Find</key>
+				<data>
+				g+MP0+NBCd8=
+				</data>
+				<key>InfoPlistPatch</key>
+				<false/>
+				<key>MatchOS</key>
+				<string>10.14.4</string>
+				<key>Name</key>
+				<string>com.apple.iokit.IOUSBHostFamily</string>
+				<key>Replace</key>
+				<data>
+				g+M/0+NBCd8=
 				</data>
 			</dict>
 		</array>
@@ -288,7 +254,7 @@
 		<key>BooterConfig</key>
 		<string>0x28</string>
 		<key>CsrActiveConfig</key>
-		<string>0x3E7</string>
+		<string>0x3</string>
 		<key>MLB</key>
 		<string>:MLB:</string>
 		<key>ROM</key>
