@@ -50,8 +50,6 @@ end
 # string, string -> int
 def write_outfile(file, contents)
     file.write(contents)
-
-    File.stat(file).size
 end
 
 def verify_plist(filename)
@@ -95,7 +93,9 @@ def main
     templates.each do |template|
         in_file = File.open(template, File::RDONLY)
         out_filename = File.join(out_directory, File.basename(in_file))
-        len = File.open(out_filename, File::WRONLY|File::EXCL) do |file|
+        len = 0
+
+        File.open(out_filename, 'w') do |file|
             out_contents = replace_placeholders(template, serials)
             len = write_outfile(file, out_contents)
         end
