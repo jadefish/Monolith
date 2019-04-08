@@ -12,9 +12,9 @@ Hackintosh configuration and kexts.
 
 ## Usage
 
-1. Create a `serials.yaml` file with the following key-value pairs:
+1. Create a `configuration/serials.yaml` file with the following key-value pairs:
     * `MLB`
     * `BoardSerialNumber`
     * `SerialNumber`
     * `SmUUID`
-2. Run `make_config`
+2. Run `configuration/make_config`
