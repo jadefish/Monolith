@@ -8,6 +8,8 @@
 		<dict>
 			<key>Fixes</key>
 			<dict>
+				<key>FixHPET</key>
+				<true/>
 				<key>AddMCHC</key>
 				<true/>
 				<key>FixHPET</key>
@@ -80,6 +82,8 @@
 		</array>
 		<key>FixHeaders</key>
 		<true/>
+		<key>HaltEnabler</key>
+		<false/>
 		<key>SSDT</key>
 		<dict>
 			<key>Generate</key>
