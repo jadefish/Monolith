@@ -8,8 +8,6 @@
 		<dict>
 			<key>Fixes</key>
 			<dict>
-				<key>FixHPET</key>
-				<true/>
 				<key>AddMCHC</key>
 				<true/>
 				<key>FixHPET</key>
@@ -96,13 +94,18 @@
 	<key>Boot</key>
 	<dict>
 		<key>Arguments</key>
-		<string>alcid=16 dart=0</string>
+		<string>dart=0 slide=0 darkwake=0</string>
 		<key>DefaultVolume</key>
 		<string>LastBootedVolume</string>
 		<key>Timeout</key>
 		<integer>-1</integer>
 		<key>XMPDetection</key>
 		<string>Yes</string>
+	</dict>
+	<key>CPU</key>
+	<dict>
+		<key>Type</key>
+		<string>0x1005</string>
 	</dict>
 	<key>Devices</key>
 	<dict>
@@ -113,49 +116,19 @@
 		</dict>
 		<key>Properties</key>
 		<dict>
-			<key>PciRoot(0)/Pci(0x1,0)/Pci(0,0)/Pci(0,0)/Pci(0,0)</key>
+			<key>PciRoot(0x0)/Pci(0x1f,0x3)</key>
 			<dict>
-				<key>PP_DisableClockStretcher</key>
-				<integer>1</integer>
-				<key>PP_DisablePowerContainment</key>
-				<integer>0</integer>
-				<key>PP_DisableULV</key>
-				<integer>1</integer>
-				<key>PP_EnableUploadFirmware</key>
-				<integer>0</integer>
-				<key>PP_Falcon_QuickTransition_Enable</key>
-				<integer>1</integer>
-				<key>PP_GfxOffControl</key>
-				<integer>0</integer>
-				<key>PP_PhmSoftPowerPlayTable</key>
+				<key>layout-id</key>
 				<data>
-				tgIIAQBcAOEGAADuKwAAGwBIAAAAgKkDAPBJAgAyAAgA
-				AAAAAAAAAAAAAAAAAAIBXABPAkYClACeAb4AKAF6AIwA
-				vAEAAAAAcgIAAJAAqAJtAUMBlwHwSQIAcQICAgAAAAAA
-				AAgAAAAAAAAABQAHAAMABQAAAAAAAAABCCADhAO2A+gD
-				GgRMBH4EsAQBAUYFAQGEAwAIYOoAAABAGQEAAYA4AQAC
-				3EoBAAOQXwEABAB3AQAFkJEBAAZssAEABwEI0EwBAAAA
-				gAAAAAAAAByDAQABAAAAAAAAAABwpwEAAgAAAAAAAAAA
-				iLwBAAMAAAAAAAAAAMDUAQAEAAAAAAAAAABEIwIABQAA
-				AAABAAAAAFgCAAYAAAAAAQAAALh8AgAHAAAAAAEAAAAA
-				BWDqAAAAQBkBAACAOAEAANxKAQAAkF8BAAAACChuAAAA
-				LMkAAAH4CwEAAoA4AQADkF8BAAT0kQEABdCwAQAGwNQB
-				AAcACGw5AAAAJF4AAAH8hQAAAqy8AAADNNAAAARobgEA
-				BQiXAQAG7KMBAAcAAWg8AQAAAQQ8QQAAAAAAUMMAAAAA
-				AIA4AQACAAAkcQEABAAAAQgAmIUAAEC1AABg6gAAUMMA
-				AAGAuwAAYOoAAJQLAQBQwwAAAgDhAACUCwEAQBkBAFDD
-				AAADeP8AAEAZAQCIJgEAUMMAAARAGQEAgDgBAIA4AQBQ
-				wwAABYA4AQDcSgEA3EoBAFDDAAAGAHcBAAB3AQCQXwEA
-				UMMAAAeQkQEAkJEBAAB3AQBQwwAAARgAAAAAAAAAC3AX
-				6APwCi0ACgBUA5ABkAGQAZABkAGQAZABAAAAAAACBDEH
-				3ADcANwALAEAAFkAaQBKAEoAXwBzAHMAZABAAJCSl2CW
-				AJBVAAAAAAAAAAAAAAAAAAAAAAACAtQwAAACEGDqAAAC
-				EA==
+				EAAAAA==
 				</data>
-				<key>PP_PhmUseDummyBackEnd</key>
-				<integer>0</integer>
-				<key>PP_ToolsLogSpaceSize</key>
-				<integer>524288</integer>
+			</dict>
+			<key>PciRoot(0x0)/Pci(0x2,0x0)</key>
+			<dict>
+				<key>AAPL,ig-platform-id</key>
+				<data>
+				AwCYPg==
+				</data>
 			</dict>
 		</dict>
 		<key>USB</key>
@@ -166,14 +139,14 @@
 	</dict>
 	<key>GUI</key>
 	<dict>
+		<key>Hide</key>
+		<array>
+			<string>Preboot</string>
+		</array>
 		<key>Scan</key>
 		<dict>
-			<key>Entries</key>
-			<true/>
 			<key>Legacy</key>
 			<false/>
-			<key>Tool</key>
-			<true/>
 		</dict>
 		<key>TextOnly</key>
 		<true/>
@@ -189,69 +162,6 @@
 		<false/>
 		<key>KernelPm</key>
 		<true/>
-		<key>KextsToPatch</key>
-		<array>
-			<dict>
-				<key>Comment</key>
-				<string>USB Port Limit Patch 1</string>
-				<key>Disabled</key>
-				<false/>
-				<key>Find</key>
-				<data>
-				g/sPD4cLBAAA
-				</data>
-				<key>InfoPlistPatch</key>
-				<false/>
-				<key>MatchOS</key>
-				<string>10.14.4</string>
-				<key>Name</key>
-				<string>com.apple.iokit.IOUSBHostFamily</string>
-				<key>Replace</key>
-				<data>
-				g/s/D4cLBAAA
-				</data>
-			</dict>
-			<dict>
-				<key>Comment</key>
-				<string>USB Port Limit Patch 2</string>
-				<key>Disabled</key>
-				<false/>
-				<key>Find</key>
-				<data>
-				QYP/Dw+DlAQAAA==
-				</data>
-				<key>InfoPlistPatch</key>
-				<false/>
-				<key>MatchOS</key>
-				<string>10.14.4</string>
-				<key>Name</key>
-				<string>com.apple.driver.usb.AppleUSBXHCI</string>
-				<key>Replace</key>
-				<data>
-				QYP/Pw+DlAQAAA==
-				</data>
-			</dict>
-			<dict>
-				<key>Comment</key>
-				<string>USB Port Limit Patch 3</string>
-				<key>Disabled</key>
-				<false/>
-				<key>Find</key>
-				<data>
-				g+MP0+NBCd8=
-				</data>
-				<key>InfoPlistPatch</key>
-				<false/>
-				<key>MatchOS</key>
-				<string>10.14.4</string>
-				<key>Name</key>
-				<string>com.apple.iokit.IOUSBHostFamily</string>
-				<key>Replace</key>
-				<data>
-				g+M/0+NBCd8=
-				</data>
-			</dict>
-		</array>
 	</dict>
 	<key>RtVariables</key>
 	<dict>
@@ -269,7 +179,7 @@
 		<key>BoardSerialNumber</key>
 		<string>:BoardSerialNumber:</string>
 		<key>ProductName</key>
-		<string>iMac18,3</string>
+		<string>iMac19,1</string>
 		<key>SerialNumber</key>
 		<string>:SerialNumber:</string>
 		<key>SmUUID</key>
