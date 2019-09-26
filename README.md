@@ -6,15 +6,14 @@ Hackintosh configuration and kexts.
 
 * **CPU**: Intel Core i9-9900k (Coffee Lake)
     * iGPU: Intel UHD 630
-* **Motherboard**: Gigabyte Z390 I Aorus Pro WiFi
-    * Audio: Realtek ALC1220
+* **Motherboard**: ASUS ROG Strix Z370-I Gaming
+    * Audio: Realtek ALC1220 ("SupremeFX S1220A")
 * **GPU**: MSI RX Vega 64 AIR Boost
 
 ## Usage
 
 1. Create a `configuration/serials.yml` file with the following key-value pairs:
     * `MLB`
-    * `BoardSerialNumber`
-    * `SerialNumber`
-    * `SmUUID`
+	* `SystemSerialNumber`
+	* `SystemUUID`
 2. Run `configuration/make_config`
