@@ -5,12 +5,12 @@ require 'yaml'
 DEFAULT_ARGS = {
     in: './templates',
     out: './out',
-    serials: 'serials.yaml'
+    serials: 'serials.yml'
 }.freeze
 USAGE = 'usage: make_config ' \
         '[--in=./templates] ' \
         '[--out=./out] ' \
-        '[--serials=serials.yaml]'.freeze
+        '[--serials=serials.yml]'.freeze
 
 class Hash
     def symbolize_keys
