@@ -7,25 +7,18 @@ DEFAULT_ARGS = {
     out: './out',
     serials: 'serials.yml'
 }.freeze
-USAGE = 'usage: make_config ' \
-        '[--in=./templates] ' \
-        '[--out=./out] ' \
-        '[--serials=serials.yml]'.freeze
+USAGE = <<~TEXT.freeze
+    usage: make_config [--in=./templates] [--out=./out] [--serials=serials.yml]
+TEXT
 
-class Hash
-    def symbolize_keys
-        Hash[self.map { |k, v| [k.to_sym, v] }]
-    end
-
-    def slice(*keys)
-        Hash[[keys, self.values_at(*keys)].transpose]
-    end
+def symbolize_keys(hash)
+    hash.transform_keys(&:to_sym)
 end
 
 # parse an array of strings of the format "--key=value" or "-flag" and return
 # a hash of `:key => value` or `:flag => nil` pairs.
 def parse_args(arr)
-    Hash[arr.flat_map{|s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) }].symbolize_keys
+    symbolize_keys(arr.flat_map { |s| s.scan(/--?([^=\s]+)(?:=(\S+))?/) }.to_h)
 end
 
 # string -> hash, bool
@@ -41,7 +34,7 @@ def replace_placeholders(filename, serials)
     in_contents = File.read(filename)
 
     serials.each do |k, v|
-        in_contents = in_contents.gsub(":#{k}:", v)
+        in_contents.gsub!(":#{k}:", v)
     end
 
     in_contents
@@ -101,7 +94,7 @@ def main
         end
 
         ok = verify_plist(out_filename)
-        
+
         puts "#{out_filename}: OK, #{len} bytes" if ok
 
         all_ok &&= ok
