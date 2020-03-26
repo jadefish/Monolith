@@ -21,7 +21,7 @@ Hackintosh configuration and files.
     * `MLB`
 	* `SystemSerialNumber`
 	* `SystemUUID`
-2. Run `configuration/make_config`
+2. Run `make`
 3. Compile SSDT DSL files via [MaciASL.app](https://github.com/acidanthera/MaciASL)
 4. Copy `EFI` directory, generated `config.plist` file(s), and compiled SSDT
    `aml` files to your EFI system partition

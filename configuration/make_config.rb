@@ -1,5 +1,4 @@
-#!/usr/bin/env ruby
-
+# frozen_string_literal: true
 require 'yaml'
 
 DEFAULT_ARGS = {
@@ -7,7 +6,7 @@ DEFAULT_ARGS = {
     out: File.join(__dir__, 'out'),
     serials: File.join(__dir__, 'serials.yml')
 }.freeze
-USAGE = <<~TEXT.freeze
+USAGE = <<~TEXT
     usage: make_config [--in=./templates] [--out=./out] [--serials=serials.yml]
 TEXT
 
