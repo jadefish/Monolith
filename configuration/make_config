@@ -3,9 +3,9 @@
 require 'yaml'
 
 DEFAULT_ARGS = {
-    in: './templates',
-    out: './out',
-    serials: 'serials.yml'
+    in: File.join(__dir__, 'templates'),
+    out: File.join(__dir__, 'out'),
+    serials: File.join(__dir__, 'serials.yml')
 }.freeze
 USAGE = <<~TEXT.freeze
     usage: make_config [--in=./templates] [--out=./out] [--serials=serials.yml]
