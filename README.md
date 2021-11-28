@@ -13,15 +13,9 @@ Hackintosh configuration and files.
 ## Software
 
 * **Bootloader**: [OpenCore](https://github.com/acidanthera/opencorepkg)
-* **OS**: macOS 10.15 Catalina
+* **OS**: macOS 10.12
 
 ## Usage
 
-1. Create a `configuration/serials.yml` file with the following key-value pairs:
-    * `MLB`
-	* `SystemSerialNumber`
-	* `SystemUUID`
-2. Run `make`
-3. Compile SSDT DSL files via [MaciASL.app](https://github.com/acidanthera/MaciASL)
-4. Copy `EFI` directory, generated `config.plist` file(s), and compiled SSDT
-   `aml` files to your EFI system partition
+TODO
+
