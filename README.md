@@ -8,14 +8,24 @@ Hackintosh configuration and files.
     * iGPU: Intel UHD 630
 * **Motherboard**: ASUS ROG Strix Z370-I Gaming
     * Audio: Realtek ALC1220 ("SupremeFX S1220A")
-* **GPU**: MSI RX Vega 64 AIR Boost
+    * 1x USB-C connector, with switch (type 9)
+* **GPU**: AMD Radeon RX 6800 XT
+
+
+## Unsupported
+
+* Wi-Fi
+* Bluetooth
+
 
 ## Software
 
 * **Bootloader**: [OpenCore](https://github.com/acidanthera/opencorepkg)
 * **OS**: macOS 10.12
 
-## Usage
 
-TODO
+## Requirements
 
+* plutil
+* [iasl](https://github.com/RehabMan/Intel-iasl)
+* [ocvalidate](https://github.com/acidanthera/OpenCorePkg/tree/master/Utilities/ocvalidate#readme)
