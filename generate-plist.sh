@@ -303,6 +303,7 @@ main() {
 		boot_args+=('-alcdbg')
 	fi
 	setval "NVRAM.Add.7C436110-AB2A-4BBB-A880-FE41995C9F82.boot-args" -string "${boot_args[*]}"
+	delete "NVRAM.Add.7C436110-AB2A-4BBB-A880-FE41995C9F82.#INFO (prev-lang:kbd)"
 	setval 'NVRAM.LegacySchema' -dictionary
 
 	## PlatformInfo:
