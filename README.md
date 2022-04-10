@@ -49,3 +49,20 @@ $ ./generate-plist.sh Sample.plist \
     --tool tool/*.efi \
     --driver driver/*.efi > config.plist
 ```
+
+Alternatively, MLB, ROM, serial number, UUID, and the system product string can be provided via environment variables if not overridden with arguments:
+
+```
+$ env
+MLB=my-mlb-value
+ROM=base64-rom-data
+SERIAL=my-serial-number
+UUID=my-uuid
+PRODUCT=system-product-string
+
+$ ./generate-plist.sh Sample.plist \
+    --ssdt ssdt/*.aml \
+    --kext kext/Lilu.kext kext/*.kext \
+    --tool tool/*.efi \
+    --driver driver/*.efi > config.plist
+```

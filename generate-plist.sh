@@ -39,11 +39,21 @@ show_help() {
 	      --debug  include debugging configuration:
 	               Target, DisplayLevel, AppleDebug, ApplePanic, DisableWatchDog
 
+	  The following options are required. If not specified, the corresponding
+	  environment variable will be used as a fallback.
 	  --mlb STRING      use STRING as the value for PlatformInfo.Generic.MLB
+	                    (environment variable: MLB)
 	  --rom DATA        use DATA as the value for PlatformInfo.Generic.ROM
-	  --serial STRING   use STRING as the value for PlatformInfo.Generic.SystemSerialNumber
-	  --uuid STRING     use STRING as the value for PlatformInfo.Generic.SystemUUID
-	  --product STRING  use STRING as the value for PlatformInfo.Generic.SystemProductName
+	                    (environment variable: ROM)
+	  --serial STRING   use STRING as the value for
+	                    PlatformInfo.Generic.SystemSerialNumber
+	                    (environment variable: SERIAL)
+	  --uuid STRING     use STRING as the value for
+	                    PlatformInfo.Generic.SystemUUID
+	                    (environment variable: UUID)
+	  --product STRING  use STRING as the value for
+	                    PlatformInfo.Generic.SystemProductName
+	                    (environment variable: PRODUCT)
 
 	  The following options can be specified multiple times and in any order:
 	  --ssdt FILE    include a .aml compiled SSDT FILE
@@ -51,7 +61,7 @@ show_help() {
 	  --tool FILE    include a .efi EFI tool FILE
 	  --driver FILE  include a .efi drive FILE
 
-	  SSDT AMLs, kextts, tools, and drivers are added in the order provided. If
+	  SSDT AMLs, kexts, tools, and drivers are added in the order provided. If
 	  one kext must be loaded before another, ensure it is passed earlier in
 	  the list of kext arguments.
 	EOF
@@ -83,11 +93,11 @@ main() {
 	local kexts=()
 	local drivers=()
 	local tools=()
-	local mlb="${MLB:-""}"
-	local serial_number="${SERIAL_NUMBER:-""}"
-	local uuid="${UUID:-""}"
-	local rom="${ROM:-""}"
-	local product="${PRODUCT:-""}"
+	local mlb
+	local serial_number
+	local uuid
+	local rom
+	local product
 	local debug=false
 
 	# Need to swap IFS to ensure arguments with spaces are not split to words
@@ -157,6 +167,13 @@ main() {
 		shift
 	done
 	IFS="${OLD_IFS}"
+
+	# fall back to environment variables if values were not provided:
+	mlb="${mlb:-"${MLB}"}"
+	serial_number="${serial_number:-"${SERIAL}"}"
+	uuid="${uuid:-"${UUID}"}"
+	rom="${rom:-"${ROM}"}"
+	product="${product:-"${PRODUCT}"}"
 
 	delete "#WARNING - 1"
 	delete "#WARNING - 2"
