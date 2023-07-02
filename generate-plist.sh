@@ -230,7 +230,7 @@ main() {
 		setval "Kernel.Add.$i.Comment" -string ''
 		setval "Kernel.Add.$i.Enabled" -bool true
 
-		if [ $has_executable = true ]; then
+		if [ "$has_executable" = true ]; then
 			setval "Kernel.Add.$i.ExecutablePath" -string "${executable_path}"
 		fi
 
@@ -264,8 +264,8 @@ main() {
 	local target=0
 	local display_level=0
 	if [ $debug = true ]; then
-		target=$((16#47)) # enable | console | file
-		display_level=$((16#80000042)) # DEBUG_WARN | DEBUG_INFO | DEBUG_ERROR
+		target=$((16#47)) # enable|console|file
+		display_level=$((16#80000042)) # DEBUG_WARN|DEBUG_INFO|DEBUG_ERROR
 	fi
 	setval 'Misc.Debug.AppleDebug' -bool $debug
 	setval 'Misc.Debug.ApplePanic' -bool $debug
@@ -273,7 +273,6 @@ main() {
 	setval 'Misc.Debug.DisplayLevel' -integer $display_level
 	setval 'Misc.Debug.SysReport' -bool $debug
 	setval 'Misc.Debug.Target' -integer $target
-	setval 'Misc.Security.AllowNvramReset' -bool $debug
 	setval 'Misc.Security.DmgLoading' -string 'Disabled'
 
 	setval 'Misc.Tools' -array
@@ -281,12 +280,26 @@ main() {
 		local file="${tools[$i]}"
 		local name="${file%.*}"
 
+		# Per Configuration.pdf, "FullNvramAccess" is required for tools which
+		# "need to access NVRAM directly without the redirections put in place
+		# by RequestBootVarRouting."
+		local fullNvramAccess
+		case "${file}" in
+		CleanNvram.efi|ControlMsrE2.efi|OpenControl.efi)
+			fullNvramAccess=true
+			;;
+		*)
+			fullNvramAccess=false
+			;;
+		esac
+
 		setval "Misc.Tools.$i" -dictionary
 		setval "Misc.Tools.$i.Arguments" -string ""
 		setval "Misc.Tools.$i.Auxiliary" -bool true
 		setval "Misc.Tools.$i.Comment" -string ""
 		setval "Misc.Tools.$i.Enabled" -bool true
 		setval "Misc.Tools.$i.Flavour" -string "Auto"
+		setval "Misc.Tools.$i.FullNvramAccess" -bool $fullNvramAccess
 		setval "Misc.Tools.$i.Name" -string "${name}"
 		setval "Misc.Tools.$i.Path" -string "${file}"
 		setval "Misc.Tools.$i.RealPath" -bool false
@@ -318,17 +331,31 @@ main() {
 	setval 'UEFI.Audio.AudioCodec' -integer 0
 	setval 'UEFI.Audio.AudioDevice' -string 'PciRoot(0x0)/Pci(0x1f,0x3)'
 	setval 'UEFI.Audio.AudioSupport' -bool true
-	setval 'UEFI.Audio.SetupDelay' -integer $((500*1000)) # 500 ms
+	setval 'UEFI.Audio.SetupDelay' -integer 500 # milliseconds
 
 	setval 'UEFI.Drivers' -array
 	for ((i = 0; i < ${#drivers[@]}; i++)) do
 		local file="${drivers[$i]}"
 
+		# Per in Configuration.pdf, "LoadEarly" is recommended only for
+		# OpenVariableRuntimeDxe.efi. (Monolith does not use this driver,
+		# however.)
+		local loadEarly
+		case "${file}" in
+		OpenVariableRuntimeDxe.efi)
+			loadEarly=true
+			;;
+		*)
+			loadEarly=false
+			;;
+		esac
+
 		setval "UEFI.Drivers.$i" -dictionary
-		setval "UEFI.Drivers.$i.Arguments" -string ""
 		setval "UEFI.Drivers.$i.Comment" -string ""
 		setval "UEFI.Drivers.$i.Enabled" -bool true
 		setval "UEFI.Drivers.$i.Path" -string "${file}"
+		setval "UEFI.Drivers.$i.LoadEarly" -bool $loadEarly
+		setval "UEFI.Drivers.$i.Arguments" -string ""
 	done
 
 	setval 'UEFI.ReservedMemory' -array
