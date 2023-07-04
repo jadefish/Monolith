@@ -2,6 +2,23 @@
 
 Hackintosh configuration and files.
 
+## Usage
+
+1. Obtain an OpenCore `Sample.plist` file via an OpenCore debug or release build
+2. Download all required kexts, drivers, and tools
+3. Compile all necessary ACPI tables via `iasl` and keep the `.aml` files handy
+4. Write an [instructions script](https://github.com/jadefish/Monolith/wiki/Instructions-scripts)
+5. Generate the output `config.plist`:
+   ```bash
+   $ ./monolith --product $PRODUCT \
+         --mlb $MLB \
+         --rom $ROM \
+         --serial $SERIAL \
+         --uuid $UUID \
+         Sample.plist \
+         instructions > config.plist
+   ```
+
 ## Hardware
 
 * **CPU**: Intel Core i9-9900k (Coffee Lake)
@@ -24,47 +41,10 @@ Hackintosh configuration and files.
 * **OS**: macOS 13 Ventura
 
 
-## Requirements
+## Building
 
-* plutil
-* [iasl](https://github.com/RehabMan/Intel-iasl)
-* [ocvalidate](https://github.com/acidanthera/OpenCorePkg/tree/master/Utilities/ocvalidate#readme)
-
-
-## Usage
-
-1. Obtain an OpenCore `Sample.plist` file via an OpenCore debug or release build.
-2. Download all required kexts and copy into `./kext`.
-3. Download all required drivers and copy into `./driver`.
-4. Download all required tools and copy into `./tool`.
-5. Copy all required SSDTs from the downloaded OpenCore build (and wherever else) and place into ``./ssdt`.
-6. Patch the sample plist as `config.plist` via `make` or the following:
-    ```bash
-    $ ./generate-plist.sh Sample.plist \
-        --mlb my-mlb-value \
-        --rom base64-rom-data \
-        --serial my-serial-number \
-        --uuid my-uuid \
-        --product system-product-string \
-        --ssdt ssdt/*.aml \
-        --kext kext/Lilu.kext kext/*.kext \
-        --tool tool/*.efi \
-        --driver driver/*.efi > config.plist
-    ```
-
-Alternatively, MLB, ROM, serial number, UUID, and the system product string can be provided via environment variables if not overridden with arguments:
+Install Go 1.20 or later, then simply build:
 
 ```bash
-$ env
-MLB=my-mlb-value
-ROM=base64-rom-data
-SERIAL=my-serial-number
-UUID=my-uuid
-PRODUCT=system-product-string
-
-$ ./generate-plist.sh Sample.plist \
-    --ssdt ssdt/*.aml \
-    --kext kext/Lilu.kext kext/*.kext \
-    --tool tool/*.efi \
-    --driver driver/*.efi > config.plist
+$ go build
 ```

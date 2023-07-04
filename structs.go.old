@@ -1,0 +1,530 @@
+package main
+
+type Plist struct {
+	ACPI             ACPI
+	Booter           Booter
+	DeviceProperties DeviceProperties
+	Kernel           Kernel
+	Misc             Misc
+	NVRAM            NVRAM
+	PlatformInfo     PlatformInfo
+	UEFI             UEFI
+}
+
+type ACPI struct {
+	Add    []ACPIAddEntry
+	Delete []ACPIDeleteEntry
+	Patch  []ACPIPatchEntry
+	Quirks ACPIQuirks
+}
+
+type ACPIAddEntry struct {
+	Comment string
+	Enabled bool
+	Path    string
+}
+
+type ACPIDeleteEntry struct {
+	All            bool
+	Comment        string
+	Enabled        bool
+	OemTableId     []byte
+	TableLength    int
+	TableSignature []byte
+}
+
+type ACPIPatchEntry struct {
+	Base           string
+	BaseSkip       int
+	Comment        string
+	Count          int
+	Enabled        bool
+	Find           []byte
+	Limit          int
+	Mask           []byte
+	OemTableId     []byte
+	Replace        []byte
+	ReplaceMask    []byte
+	Skip           int
+	TableLength    int
+	TableSignature []byte
+}
+
+type ACPIQuirks struct {
+	FadtEnableReset  bool
+	NormalizeHeaders bool
+	RebaseRegions    bool
+	ResetHwSig       bool
+	ResetLogoStatus  bool
+	SyncTableIds     bool
+}
+
+type Booter struct {
+	MmioWhitelist []MMIOWhitelistEntry
+	Patch         []BooterPatchEntry
+	Quirks        BooterQuirks
+}
+
+type MMIOWhitelistEntry struct {
+	Address int
+	Comment string
+	Enabled bool
+}
+
+type BooterPatchEntry struct {
+	Arch        string
+	Comment     string
+	Count       int
+	Enabled     bool
+	Find        []byte
+	Identifier  string
+	Limit       int
+	Mask        []byte
+	Replace     []byte
+	ReplaceMask []byte
+	Skip        int
+}
+
+type BooterQuirks struct {
+	AllowRelocationBlock   bool
+	AvoidRuntimeDefrag     bool
+	DevirtualiseMmio       bool
+	DisableSingleUser      bool
+	DisableVariableWrite   bool
+	DiscardHibernateMap    bool
+	EnableSafeModeSlide    bool
+	EnableWriteUnprotector bool
+	ForceBooterSignature   bool
+	ForceExitBootServices  bool
+	ProtectMemoryRegions   bool
+	ProtectSecureBoot      bool
+	ProtectUefiServices    bool
+	ProvideCustomSlide     bool
+	ProvideMaxSlide        int
+	RebuildAppleMemoryMap  bool
+	ResizeAppleGpuBars     int
+	SetupVirtualMap        bool
+	SignalAppleOS          bool
+	SyncRuntimePermissions bool
+}
+
+// TODO: eek
+type DeviceProperties struct {
+	Add    map[string]map[string][]byte
+	Delete map[string]map[string][]byte
+}
+
+type Kernel struct {
+	Add     []KernelAdd
+	Block   []KernelBlock
+	Emulate KernelEmulate
+	Force   []KernelForce
+	Patch   []KernelPatch
+	Quirks  KernelQuirks
+	Scheme  KernelScheme
+}
+
+type KernelAdd struct {
+	Arch           string
+	BundlePath     string
+	Comment        string
+	Enabled        bool
+	ExecutablePath string
+	MaxKernel      string
+	MinKernel      string
+	PlistPath      string
+}
+
+type KernelBlock struct {
+	Arch       string
+	Comment    string
+	Enabled    bool
+	Identifier string
+	MaxKernel  string
+	MinKernel  string
+	Strategy   string // TODO: reify to enum(Disable, Exclude)
+}
+
+type KernelEmulate struct {
+	Cpuid1Data           []byte
+	Cpuid1Mask           []byte
+	DummyPowerManagement bool
+	MaxKernel            string
+	MinKernel            string
+}
+
+type KernelForce struct {
+	Arch           string
+	BundlePath     string
+	Comment        string
+	Enabled        bool
+	ExecutablePath string
+	Identifier     string
+	MaxKernel      string
+	MinKernel      string
+	PlistPath      string
+}
+
+type KernelPatch struct {
+	Arch        string
+	Base        string
+	Comment     string
+	Count       int
+	Enabled     bool
+	Find        []byte
+	Identifier  string
+	Limit       int
+	Mask        []byte
+	MaxKernel   string
+	MinKernel   string
+	Replace     []byte
+	ReplaceMask []byte
+	Skip        int
+}
+
+type KernelQuirks struct {
+	AppleCpuPmCfgLock       bool
+	AppleXcpmCfgLock        bool
+	AppleXcpmExtraMsrs      bool
+	AppleXcpmForceBoost     bool
+	CustomPciSerialDevice   bool
+	CustomSMBIOSGuid        bool
+	DisableIoMapper         bool
+	DisableIoMapperMapping  bool
+	DisableLinkeditJettison bool
+	DisableRtcChecksum      bool
+	ExtendBTFeatureFlags    bool
+	ExternalDiskIcons       bool
+	ForceAquantiaEthernet   bool
+	ForceSecureBootScheme   bool
+	IncreasePciBarSize      bool
+	LapicKernelPanic        bool
+	LegacyCommpage          bool
+	PanicNoKextDump         bool
+	PowerTimeoutKernelPanic bool
+	ProvideCurrentCpuInfo   bool
+	SetApfsTrimTimeout      int
+	ThirdPartyDrives        bool
+	XhciPortLimit           bool
+}
+
+type KernelScheme struct {
+	CustomKernel bool
+	FuzzyMatch   bool
+	KernelArch   string // TODO: reify to enum(i386, i386-user32, x86_64)
+	KernelCache  string // TODO: reify to enum(Auto, Cacheless, Mkext, Prelinked)
+}
+
+type Misc struct {
+	Boot struct {
+		ConsoleAttributes    int    // TODO: define console attributes
+		HibernateMode        string // TODO: enum(None, Auto, RTC, NVRAM)
+		HibernateSkipsPicker bool
+		HideAuxiliary        bool
+		LauncherOption       string // TODO: enum(Disabled, Full, Short, System)
+		LauncherPath         string
+		PickerAttributes     int // TODO: define picker attributes
+		PickerAudioAssist    bool
+		PollAppleHotKeys     bool
+		ShowPicker           bool
+		TakeoffDelay         int
+		Timeout              int
+		PickerMode           string // TODO: enum(Builtin, External, Apple)
+		PickerVariant        string
+	}
+	BlessOverride []string
+	Debug         struct {
+		AppleDebug      bool
+		ApplePanic      bool
+		DisableWatchDog bool // woof
+		DisplayDelay    int
+		DisplayLevel    int64
+		LogModules      string
+		SysReport       bool
+		Target          int // TODO: define target values
+	}
+	Entries []struct {
+		Arguments string
+		Auxiliary bool
+		Comment   string
+		Enabled   bool
+		Flavour   string
+		Name      string
+		Path      string
+		TextMode  bool
+	}
+	Security struct {
+		AllowSetDefault      bool
+		ApECID               int64
+		AuthRestart          bool
+		BlacklistAppleUpdate bool
+		DmgLoading           string // TODO: enum(Disabled, Signed, Any)
+		EnablePassword       bool
+		ExposeSensitiveData  int   // TODO: bitmask; define values
+		HaltLevel            int64 // TODO: bitmask; define values
+		PasswordHash         []byte
+		PasswordSalt         []byte
+		Vault                string // TODO: enum(Optional, Basic, Secure)
+		ScanPolicy           int    // TODO: bitmask, define values
+		SecureBootModel      string // TODO: enum (... too many to list. see Configuration.pdf)
+	}
+	Serial struct {
+		Custom *struct {
+			BaudRate               int
+			ClockRate              int
+			DetectCable            bool
+			ExtendedTxFifoSize     int
+			FifoControl            int
+			LineControl            int
+			PciDeviceInfo          []byte
+			RegisterAccessWidth    int
+			RegisterBase           int
+			RegisterStride         int
+			UseHardwareFlowControl bool
+			UseMmio                bool
+		} `plist:"Custom,omitempty"`
+		Init     bool
+		Override bool
+	}
+	Tools []Tool
+}
+
+type Tool struct {
+	Arguments       string
+	Auxiliary       bool
+	Comment         string
+	Enabled         bool
+	Flavour         string
+	FullNvramAccess bool
+	Name            string
+	Path            string
+	RealPath        bool
+	TextMode        bool
+}
+
+type NVRAM struct {
+	Add             map[string]map[string]interface{} // TODO: replace `interface{}`?
+	Delete          map[string][]string
+	LegacyOverwrite bool
+	LegacySchema    map[string][]string
+	WriteFlash      bool
+}
+
+type PlatformInfo struct {
+	Automatic          bool
+	CustomMemory       bool
+	UpdateDataHub      bool
+	UpdateNVRAM        bool
+	UpdateSMBIOS       bool
+	UpdateSMBIOSMode   string // TODO: enum(TryOverwrite, Create, Overwrite, Custom)
+	UseRawUuidEncoding bool
+	Generic            struct {
+		SpoofVendor        bool
+		AdviseFeatures     bool
+		MaxBIOSVersion     bool
+		SystemMemoryStatus string // TODO: enum(Auto, Upgradable, Soldered)
+		ProcessorType      int
+		SystemProductName  string
+		SystemSerialNumber string
+		SystemUUID         string
+		MLB                string
+		ROM                []byte
+	}
+	DataHub *struct {
+		PlatformName         string
+		SystemProductName    string
+		SystemSerialNumber   string
+		SystemUUID           string
+		BoardProduct         string
+		BoardRevision        []byte // 1 byte
+		StartupPowerEvents   int64  // TODO: bitmask; define values
+		InitialTSC           int64
+		FSBFrequency         int64
+		ARTFrequency         int64
+		DevicePathsSupported int
+		SmcRevision          []byte // 6 bytes
+		SmcBranch            []byte // 8 bytes
+		SmcPlatform          []byte // 8 bytes
+	} `plist:"DataHub,omitempty"`
+	Memory *struct {
+		DataWidth int16
+		Devices   []struct {
+			AssetTag      string
+			BankLocator   string
+			DeviceLocator string
+			Manufacturer  string
+			PartNumber    string
+			SerialNumber  string
+			Size          int32
+			Speed         int16
+		}
+		ErrorCorrection int8 // TODO: enum
+		FormFactor      int8 // TODO: enum
+		MaxCapacity     int64
+		TotalWidth      int16
+		Type            int8  // TODO: enum
+		TypeDetail      int16 // TODO: enum
+	} `plist:"Memory,omitempty"`
+	PlatformNVRAM *struct {
+		BID                  string
+		ROM                  []byte // 6 bytes
+		MLB                  string
+		FirmwareFeatures     []byte // 8 bytes
+		FirmwareFeaturesMask []byte // 8 bytes
+		SystemSerialNumber   string
+		SystemUUID           string
+	} `plist:"PlatformNVRAM,omitempty"`
+	SMBIOS *struct {
+		BIOSVendor             string
+		BIOSVersion            string
+		BIOSReleaseDate        string // NOT a plist Date. format: mm/dd/yyyy
+		SystemManufacturer     string
+		SystemProductName      string
+		SystemVersion          string
+		SystemSerialNumber     string
+		SystemUUID             string
+		SystemSKUNumber        string
+		SystemFamily           string
+		BoardManufacturer      string
+		BoardProduct           string
+		BoardVersion           string
+		BoardSerialNumber      string
+		BoardAssetTag          string
+		BoardType              int
+		BoardLocationInChassis string
+		ChassisManufacturer    string
+		ChassisType            int
+		ChassisVersion         string
+		ChassisSerialNumber    string
+		ChassisAssetTag        string
+		PlatformFeature        int32
+		SmcVersion             []byte // 16 bytes
+		FirmwareFeatures       []byte // 8 bytes
+		FirmwareFeaturesMask   []byte // 8 bytes
+		ProcessorType          int16
+	} `plist:"SMBIOS,omitempty"`
+}
+
+type UEFI struct {
+	APFS struct {
+		EnableJumpstart  bool
+		GlobalConnect    bool
+		HideVerbose      bool
+		JumpstartHotPlug bool
+		MinDate          int
+		MinVersion       int
+	}
+	AppleInput struct {
+		AppleEvent                     string // TODO: enum(Auto, Builtin, OEM)
+		CustomDelays                   bool
+		KeyInitialDelay                int
+		KeySubsequentDelay             int
+		GraphicsInputMirroring         bool
+		PointerPollMin                 int
+		PointerPollMax                 int
+		PointerPollMask                int32
+		PointerSpeedDiv                int
+		PointerSpeedMul                int
+		PointerDwellClickTimeout       int
+		PointerDwellDoubleClickTimeout int
+		PointerDwellRadius             int
+	}
+	Audio struct {
+		AudioCodec         int
+		AudioDevice        string
+		AudioOutMask       int
+		AudioSupport       bool
+		DisconnectHda      bool
+		MaximumGain        int
+		MinimumAssistGain  int
+		MinimumAudibleGain int
+		PlayChime          string // TODO: enum(Auto, Enabled, Disabled)
+		ResetTrafficClass  bool
+		SetupDelay         int
+	}
+	ConnectDrivers bool
+	Drivers        []Driver
+	Input          struct {
+		KeyFiltering       bool
+		KeyForgetThreshold int
+		KeySupport         bool
+		KeySupportMode     string // TODO: enum(Auto, V1, V2, AMI)
+		KeySwap            bool
+		PointerSupport     bool
+		PointerSupportMode string
+		TimerResolution    int
+	}
+	Output struct {
+		InitialMode                string // TODO: enum(Auto, Text, Graphics)
+		TextRenderer               string // TODO: enum (see Configuration.pdf)
+		ConsoleFont                string
+		ConsoleMode                string // format: WxH, or "Max"
+		Resolution                 string // format: WxH@BPP, or WxH, or "Max"
+		ForceResolution            bool
+		ClearScreenOnModeSwitch    bool
+		DirectGopRendering         bool
+		GopBurstMode               bool
+		GopPassThrough             string // TODO: enum(Enabled, Apple, Disabled)
+		IgnoreTextInGraphics       bool
+		ReplaceTabWithSpace        bool
+		ProvideConsoleGop          bool
+		ReconnectGraphicsOnConnect bool
+		ReconnectOnResChange       bool
+		SanitiseClearScreen        bool
+		UIScale                    int8
+		UgaPassThrough             bool
+	}
+	ProtocolOverrides struct {
+		AppleAudio              bool
+		AppleBootPolicy         bool
+		AppleDebugLog           bool
+		AppleEg2Info            bool
+		AppleFramebufferInfo    bool
+		AppleImageConversion    bool
+		AppleImg4Verification   bool
+		AppleKeyMap             bool
+		AppleRtcRam             bool
+		AppleSecureBoot         bool
+		AppleSmcIo              bool
+		AppleUserInterfaceTheme bool
+		DataHub                 bool
+		DeviceProperties        bool
+		FirmwareVolume          bool
+		HashServices            bool
+		OSInfo                  bool
+		PciIo                   bool
+		UnicodeCollation        bool
+	}
+	Quirks struct {
+		ActivateHpetSupport      bool
+		EnableVectorAcceleration bool
+		EnableVmx                bool
+		DisableSecurityPolicy    bool
+		ExitBootServicesDelay    int
+		ForceOcWriteFlash        bool
+		ForgeUefiSupport         bool
+		IgnoreInvalidFlexRatio   bool
+		ReleaseUsbOwnership      bool
+		ReloadOptionRoms         bool
+		RequestBootVarRouting    bool
+		ResizeUsePciRbIo         bool
+		ResizeGpuBars            int
+		TscSyncTimeout           int
+		UnblockFsConnect         bool
+	}
+	ReservedMemory []struct {
+		Address int
+		Comment string
+		Size    int
+		Type    string // TODO: enum (see Configuration.pdf)
+		Enabled bool
+	}
+}
+
+type Driver struct {
+	Comment   string
+	Enabled   bool
+	Path      string
+	LoadEarly bool
+	Arguments string
+}

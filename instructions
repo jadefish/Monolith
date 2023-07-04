@@ -1,0 +1,92 @@
+delete("#WARNING - 1")
+delete("#WARNING - 2")
+delete("#WARNING - 3")
+delete("#WARNING - 4")
+
+// ACPI:
+set("ACPI.Add", [])
+append("ACPI.Add", helpers.ACPI("ssdt/SSDT-EC-USBX.aml"))
+append("ACPI.Add", helpers.ACPI("ssdt/SSDT-EC.aml"))
+append("ACPI.Add", helpers.ACPI("ssdt/SSDT-PLUG.aml"))
+set("ACPI.Delete", [])
+set("ACPI.Patch", [])
+
+// Booter:
+set("Booter.MmioWhitelist", [])
+set("Booter.Patch", [])
+set("Booter.Quirks.DisableSingleUser", true)
+set("Booter.Quirks.ProvideCustomSlide", false)
+set("Booter.Quirks.EnableSafeModeSlide", false)
+
+// DeviceProperties:
+set("DeviceProperties.Add", {})
+set("DeviceProperties.Add.PciRoot(0x0)/Pci(0x1f,0x3)", {})
+set("DeviceProperties.Add.PciRoot(0x0)/Pci(0x1f,0x3).layout-id", 21)
+set("DeviceProperties.Delete", {})
+
+// Kernel:
+set("Kernel.Add", [])
+append("Kernel.Add", helpers.Kext("kext/Lilu.kext"))
+append("Kernel.Add", helpers.Kext("kext/AppleALC.kext"))
+append("Kernel.Add", helpers.Kext("kext/IntelMausi.kext"))
+append("Kernel.Add", helpers.Kext("kext/VirtualSMC.kext"))
+append("Kernel.Add", helpers.Kext("kext/WhateverGreen.kext"))
+set("Kernel.Block", [])
+set("Kernel.Force", [])
+set("Kernel.Patch", [])
+
+set("Kernel.Quirks.DisableIoMapper", true)
+set("Kernel.Quirks.ExtendBTFeatureFlags", true)
+set("Kernel.Quirks.PanicNoKextDump", true)
+
+// Misc:
+set("Misc.BlessOverride", [])
+set("Misc.Boot.HideAuxiliary", false)
+set("Misc.Boot.LauncherOption", "Full")
+set("Misc.Boot.PickerMode", "External")
+set("Misc.Boot.PickerAttributes", 0x91) // USE_VOLUME_ICON|USE_POINTER_CONTROL|USE_FLAVOUR_ICON
+set("Misc.Boot.PollAppleHotKeys", true)
+set("Misc.Boot.Timeout", 10)
+set("Misc.Entries", [])
+set("Misc.Security.AllowSetDefault", true)
+set("Misc.Security.ScanPolicy", 0x1290503) // FILE_SYSTEM_LOCK|DEVICE_LOCK|ALLOW_FS_APFS|ALLOW_FS_ESP|ALLOW_DEVICE_SATA|ALLOW_DEVICE_NVME|ALLOW_DEVICE_USB
+set("Misc.Security.Vault", "Optional") // TODO
+
+set("Misc.Debug.AppleDebug", vars.Debug)
+set("Misc.Debug.ApplePanic", vars.Debug)
+set("Misc.Debug.DisableWatchDog", vars.Debug)
+set("Misc.Debug.DisplayLevel", vars.Debug ? 0x80000042 : 0) // DEBUG_WARN|DEBUG_INFO|DEBUG_ERROR
+set("Misc.Debug.SysReport", vars.Debug)
+set("Misc.Debug.Target", vars.Debug ? 0x47 : 0) // enable|console|file
+set("Misc.Security.DmgLoading", "Disabled")
+set("Misc.Tools", [])
+append("Misc.Tools", helpers.Tool("tool/CleanNvram.efi"))
+append("Misc.Tools", helpers.Tool("tool/ControlMsrE2.efi"))
+append("Misc.Tools", helpers.Tool("tool/OpenControl.efi"))
+append("Misc.Tools", helpers.Tool("tool/OpenShell.efi"))
+
+// NVRAM:
+set("NVRAM.Add.7C436110-AB2A-4BBB-A880-FE41995C9F82.boot-args", "agdpmod=pikera") // TODO: figure out debug args: -v keepsyms debug=0x122 -liludebug -alcdbg
+delete("NVRAM.Add.7C436110-AB2A-4BBB-A880-FE41995C9F82.#INFO (prev-lang:kbd)")
+set("NVRAM.LegacySchema", {})
+
+// PlatformInfo:
+set("PlatformInfo.Generic.AdviseFeatures", true)
+set("PlatformInfo.Generic.SystemProductName", vars.Product)
+set("PlatformInfo.Generic.MLB", vars.MLB)
+set("PlatformInfo.Generic.ROM", vars.ROM)
+set("PlatformInfo.Generic.SystemSerialNumber", vars.SerialNumber)
+set("PlatformInfo.Generic.SystemUUID", vars.UUID)
+
+// UEFI:
+set("UEFI.Audio.AudioCodec", 0)
+set("UEFI.Audio.AudioDevice", "PciRoot(0x0)/Pci(0x1f,0x3)")
+set("UEFI.Audio.AudioSupport", true)
+set("UEFI.Audio.SetupDelay", 500) // milliseconds
+set("UEFI.Drivers", [])
+append("UEFI.Drivers", helpers.Driver("driver/AudioDxe.efi"))
+append("UEFI.Drivers", helpers.Driver("driver/OpenCanopy.efi"))
+append("UEFI.Drivers", helpers.Driver("driver/OpenRuntime.efi"))
+append("UEFI.Drivers", helpers.Driver("driver/ResetNvramEntry.efi"))
+append("UEFI.Drivers", helpers.Driver("driver/ToggleSipEntry.efi"))
+set("UEFI.ReservedMemory", [])

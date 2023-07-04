@@ -1,6 +1,5 @@
-/kext
+*.plist
 /driver
+/kext
+*.aml
 /tool
-/ssdt
-config.plist
-Sample.plist
